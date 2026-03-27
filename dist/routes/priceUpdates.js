@@ -89,9 +89,9 @@ router.post("/sign", async (req, res) => {
  */
 router.post("/multi-sig/:multiSigPriceId/request-signature", async (req, res) => {
     try {
-        const { multiSigPriceId } = req.params;
+        const multiSigPriceId = req.params.multiSigPriceId;
         const { remoteServerUrl } = req.body;
-        if (!multiSigPriceId || !remoteServerUrl) {
+        if (!multiSigPriceId || typeof multiSigPriceId !== "string" || !remoteServerUrl) {
             return res.status(400).json({
                 success: false,
                 error: "Missing multiSigPriceId (in URL) or remoteServerUrl (in body)",
@@ -120,8 +120,8 @@ router.post("/multi-sig/:multiSigPriceId/request-signature", async (req, res) =>
  */
 router.get("/multi-sig/:multiSigPriceId/status", async (req, res) => {
     try {
-        const { multiSigPriceId } = req.params;
-        if (!multiSigPriceId) {
+        const multiSigPriceId = req.params.multiSigPriceId;
+        if (!multiSigPriceId || typeof multiSigPriceId !== "string") {
             return res.status(400).json({
                 success: false,
                 error: "Missing multiSigPriceId in URL",
@@ -197,8 +197,8 @@ router.get("/multi-sig/pending", async (req, res) => {
  */
 router.get("/multi-sig/:multiSigPriceId/signatures", async (req, res) => {
     try {
-        const { multiSigPriceId } = req.params;
-        if (!multiSigPriceId) {
+        const multiSigPriceId = req.params.multiSigPriceId;
+        if (!multiSigPriceId || typeof multiSigPriceId !== "string") {
             return res.status(400).json({
                 success: false,
                 error: "Missing multiSigPriceId in URL",
@@ -246,9 +246,9 @@ router.get("/multi-sig/:multiSigPriceId/signatures", async (req, res) => {
  */
 router.post("/multi-sig/:multiSigPriceId/record-submission", async (req, res) => {
     try {
-        const { multiSigPriceId } = req.params;
+        const multiSigPriceId = req.params.multiSigPriceId;
         const { memoId, stellarTxHash } = req.body;
-        if (!multiSigPriceId || !memoId || !stellarTxHash) {
+        if (!multiSigPriceId || typeof multiSigPriceId !== "string" || !memoId || !stellarTxHash) {
             return res.status(400).json({
                 success: false,
                 error: "Missing required fields: multiSigPriceId (in URL), memoId, stellarTxHash (in body)",

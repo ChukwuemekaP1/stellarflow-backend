@@ -36,6 +36,14 @@ if (missingEnvVars.length > 0) {
   process.exit(1);
 }
 
+const dashboardUrl =
+  process.env.DASHBOARD_URL || process.env.FRONTEND_URL || "http://localhost:3000";
+
+if (!dashboardUrl) {
+  console.error("❌ Missing required environment variable: DASHBOARD_URL");
+  process.exit(1);
+}
+
 const app = express();
 const PORT = process.env.PORT || 3000;
 
@@ -48,7 +56,27 @@ const horizonUrl =
 const horizonServer = new Horizon.Server(horizonUrl);
 
 // Middleware
-app.use(cors());
+app.use(
+  cors({
+    origin: (origin, callback) => {
+      // Allow non-browser requests (e.g. curl, server-to-server)
+      if (!origin) {
+        return callback(null, true);
+      }
+
+      if (origin === dashboardUrl) {
+        return callback(null, true);
+      }
+
+      return callback(
+        new Error(
+          `CORS policy: Access denied from origin ${origin}. Allowed origin: ${dashboardUrl}`,
+        ),
+      );
+    },
+    credentials: true,
+  }),
+);
 app.use(express.json());
 
 // Swagger documentation
