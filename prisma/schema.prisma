@@ -10,6 +10,8 @@ model PriceHistory {
   id          Int       @id @default(autoincrement())
   currency    String    @db.VarChar(10)
   rate        Decimal   @db.Decimal(20, 10)
+  bid         Decimal?  @db.Decimal(20, 10) // Buy price (optional)
+  ask         Decimal?  @db.Decimal(20, 10) // Sell price (optional)
   source      String    @db.VarChar(100)
   timestamp   DateTime  @db.Timestamp(3)
   createdAt   DateTime  @default(now())
